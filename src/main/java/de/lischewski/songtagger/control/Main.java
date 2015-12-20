@@ -10,7 +10,7 @@ import de.lischewski.songtagger.view.graphical.MainFrame;
 public class Main {
 
 	public static void main(String[] args) throws UnsupportedTagException, InvalidDataException, IOException {
-		ReTagger reTagger = new ReTagger(null);
+		ReTagger reTagger = new ReTagger();
 		SongsTableModel songsTableModel = new SongsTableModel(reTagger);
 		MainFrame mainFrame = new MainFrame(songsTableModel);
 		mainFrame.setVisible(true);
