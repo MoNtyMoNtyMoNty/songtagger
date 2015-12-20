@@ -50,8 +50,8 @@ public class ReTagger {
 	private ArrayList<Mp3File> mp3Files;
 
 	public ReTagger(File directory) {
-		if (directory.isDirectory()) {
-			mp3Files = new ArrayList<Mp3File>();
+		mp3Files = new ArrayList<Mp3File>();
+		if (directory != null && directory.isDirectory()) {
 			File[] files = directory.listFiles();
 			for (File file : files) {
 				try {
@@ -65,7 +65,7 @@ public class ReTagger {
 				}
 			}
 		} else {
-			throw new RuntimeException("Given File is no directory");
+			
 		}
 	}
 
@@ -85,7 +85,11 @@ public class ReTagger {
 		return ret;
 	}
 
-	private String getInfo(int number, Info info) {
+	public int getNumberOfSongs() {
+		return this.mp3Files.size();
+	}
+
+	public String getInfo(int number, Info info) {
 		Mp3File mp3file = this.mp3Files.get(number);
 		if (isId3v1Info(info)) {
 			ID3v1 id3v1 = mp3file.getId3v1Tag();
