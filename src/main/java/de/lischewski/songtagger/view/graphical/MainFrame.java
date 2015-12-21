@@ -3,6 +3,7 @@ package de.lischewski.songtagger.view.graphical;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -183,7 +184,6 @@ public class MainFrame extends JFrame implements ActionListener, ItemListener {
 				} else if (!file.isDirectory()) {
 					JOptionPane.showMessageDialog(this, "Wie hast du das geschafft?", "Insane error", JOptionPane.ERROR_MESSAGE);
 				}
-				System.out.println(file.getParent());
 				System.out.println("Choosen Directory: " + file.getAbsolutePath());
 				this.inputDirectoryTextField.setText(file.getAbsolutePath());
 				this.songsTableModel.setDestination(file);
@@ -195,6 +195,7 @@ public class MainFrame extends JFrame implements ActionListener, ItemListener {
 			int answer = JOptionPane.showConfirmDialog(this, "Do you really want to confirm this changes?", "Are you Sure?", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 			if(answer == JOptionPane.YES_OPTION){
 				try {
+					this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 					this.songsTableModel.makeChanges();
 				} catch (NotSupportedException | IOException e) {
 					JOptionPane.showMessageDialog(this, "Error At Saving!!! Sow in Console!", "Insane error", JOptionPane.ERROR_MESSAGE);
@@ -204,6 +205,7 @@ public class MainFrame extends JFrame implements ActionListener, ItemListener {
 				this.resizeColumnWidth();
 				this.updateNumbers();
 				updateDoItButton();
+				this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 			}
 		}
 	}

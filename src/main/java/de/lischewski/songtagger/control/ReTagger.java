@@ -325,46 +325,26 @@ public class ReTagger {
 		String newPath = file.getParent() + "\\" + newName;
 		file.renameTo(new File(newPath));
 	}
+	
+	private void save(Mp3File mp3file, File file) throws NotSupportedException, IOException{
+		String tmpFile = file.getAbsolutePath()+"tmp";
+		while(new File(tmpFile).exists()){
+			tmpFile+="tmp";
+		}
+		mp3file.save(tmpFile);
+		String oldPath = file.getAbsolutePath();
+		new File(tmpFile).renameTo(new File(oldPath));
+	}
 
 	private void setInfo(int number, Info info, String str) throws NotSupportedException, IOException {
 		Mp3File mp3file = this.mp3Files.get(number);
 		File file = this.files.get(number);
-		if (mp3file.hasId3v1Tag()) {
-			ID3v1 id3v1 = mp3file.getId3v1Tag();
-			switch (info) {
-			case FileName:
-				renameFile(file, str);
-				break;
-			// case Version:
-			// return;
-			case Track:
-				id3v1.setTrack(str);
-				break;
-			case Artist:
-				id3v1.setArtist(str);
-				break;
-			case Title:
-				id3v1.setTitle(str);
-				break;
-			case Album:
-				id3v1.setAlbum(str);
-				break;
-			case Year:
-				id3v1.setYear(str);
-				break;
-			case Comment:
-				id3v1.setComment(str);
-				break;
-			default:
-				return;
-			}
-			mp3file.save(mp3file.getFilename());
-		} else if (mp3file.hasId3v2Tag()) {
+		if (mp3file.hasId3v2Tag()) {
 			ID3v2 id3v2 = mp3file.getId3v2Tag();
 			switch (info) {
 			case FileName:
 				renameFile(file, str);
-				break;
+				return;
 			// case Version:
 			// return;
 			case Track:
@@ -388,9 +368,39 @@ public class ReTagger {
 			default:
 				return;
 			}
-			mp3file.save(mp3file.getFilename());
+			save(mp3file, file);
 
-		} else {
+		}else if (mp3file.hasId3v1Tag()) {
+			ID3v1 id3v1 = mp3file.getId3v1Tag();
+			switch (info) {
+			case FileName:
+				renameFile(file, str);
+				return;
+			// case Version:
+			// return;
+			case Track:
+				id3v1.setTrack(str);
+				break;
+			case Artist:
+				id3v1.setArtist(str);
+				break;
+			case Title:
+				id3v1.setTitle(str);
+				break;
+			case Album:
+				id3v1.setAlbum(str);
+				break;
+			case Year:
+				id3v1.setYear(str);
+				break;
+			case Comment:
+				id3v1.setComment(str);
+				break;
+			default:
+				return;
+			}
+			save(mp3file, file);
+		}  else {
 			return;
 		}
 	}
